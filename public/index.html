@@ -17,11 +17,23 @@
     <script>
         if ("geolocation" in navigator) {
             console.log('geolocation is availble')
-            navigator.geolocation.getCurrentPosition(position => {
+            navigator.geolocation.getCurrentPosition(async position => {
                 const lat = position.coords.latitude
                 const log = position.coords.longitude
-               document.querySelector('#latitude').textContent = lat
-               document.querySelector('#longitude').textContent = log
+                document.querySelector('#latitude').textContent = lat
+                document.querySelector('#longitude').textContent = log
+
+                const data = { lat, log }
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }
+                const response = await fetch('/api', options)
+                const json = await response.json()
+                console.log(json)
             })
         } else {
             alert("I'm sorry, but geolocation services are not supported by your browser.");
